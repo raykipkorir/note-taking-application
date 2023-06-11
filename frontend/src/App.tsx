@@ -1,4 +1,3 @@
-import { createTheme, ThemeProvider } from "@mui/material";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import ErrorPage from "./components/ErrorPage";
@@ -11,7 +10,9 @@ import LoginPage from "./pages/LoginPage";
 import PinnedNotesPage from "./pages/PinnedNotesPage";
 import SignupPage from "./pages/SignupPage";
 import TrashNotesPage from "./pages/TrashNotesPage";
-
+import LoginRedirect from "./utils/LoginRedirect";
+import PrivateRoute from "./utils/PrivateRoute";
+import NotesDetailPage from "./pages/NotesDetailPage";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -20,19 +21,35 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <LoginPage />,
+        element: (
+          <LoginRedirect>
+            <LoginPage />
+          </LoginRedirect>
+        ),
       },
       {
         path: "/signup",
-        element: <SignupPage />,
+        element: (
+          <LoginRedirect>
+            <SignupPage />
+          </LoginRedirect>
+        ),
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        ),
         children: [
           {
             path: "",
             element: <AllNotesPage />,
+          },
+          {
+            path: ":id",
+            element: <NotesDetailPage />,
           },
           {
             path: "new",
@@ -61,10 +78,12 @@ export const router = createBrowserRouter([
 //     fontFamily: "Maven Pro Caveat",
 //   },
 // });
+
 function App() {
   return (
     // <ThemeProvider theme={theme}>
     <RouterProvider router={router} />
+
     // </ThemeProvider>
   );
 }

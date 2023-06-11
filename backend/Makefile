@@ -3,3 +3,6 @@ server:
 
 migrations:
 	python manage.py makemigrations
+
+test:
+	coverage run manage.py test

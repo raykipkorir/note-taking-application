@@ -12,8 +12,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
+import authService from "../../services/auth.services";
 
 type Inputs = {
   email: string;
@@ -25,8 +26,17 @@ function index() {
   const { register, handleSubmit, formState } = useForm<Inputs>();
   const { errors } = formState;
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const response = await authService.login(data.email, data.password);
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      localStorage.setItem("user", JSON.stringify(data));
+      window.location.reload();
+      navigate("/dashboard");
+    }
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
