@@ -1,3 +1,4 @@
+import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotesIcon from "@mui/icons-material/Notes";
 import PushPinIcon from "@mui/icons-material/PushPin";
@@ -7,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
+import authService from "../services/auth.services";
 
 function NoteSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,6 +36,9 @@ function NoteSidebar() {
           <Link to={"/dashboard/trash"}>
             <MenuItem icon={<RestoreFromTrashIcon />}>Trash</MenuItem>
           </Link>
+          <button type="submit" onClick={authService.logout}>
+            <MenuItem icon={<LogoutIcon />}>Logout</MenuItem>
+          </button>
         </Menu>
       </Sidebar>
     </>

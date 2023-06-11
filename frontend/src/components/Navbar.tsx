@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 
 function Navbar() {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   return (
     <Grid
       container
@@ -33,13 +35,15 @@ function Navbar() {
           Note taking application
         </Typography>
       </Grid>
-      <Grid item xs={12} md={4} sx={{ paddingTop: "0px" }}>
-        <Button variant="contained" size="small">
-          <Link to={"/dashboard/new"} style={{ fontSize: "13px" }}>
-            Add note
-          </Link>
-        </Button>
-      </Grid>
+      {user.access && (
+        <Grid item xs={12} md={4} sx={{ paddingTop: "0px" }}>
+          <Button variant="contained" size="small">
+            <Link to={"/dashboard/new"} style={{ fontSize: "13px" }}>
+              Add note
+            </Link>
+          </Button>
+        </Grid>
+      )}
 
       {/* </nav> */}
     </Grid>

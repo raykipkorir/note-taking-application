@@ -1,5 +1,12 @@
+import NotesList from "./NotesList";
+
 function index() {
-  return <h3>All notes</h3>;
+  return (
+    <>
+      <p>All your notes</p>
+      {<NotesList />}
+    </>
+  );
 }
 
 export default index;
