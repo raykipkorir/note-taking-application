@@ -4,15 +4,18 @@ import noteService from "../../services/notes.services";
 import { Note } from "./NotesListType";
 
 function NotesList() {
+
   const [notes, setNotes] = useState([]);
-  console.log(notes);
+
   useEffect(() => {
     const getNotes = async () => {
-      const response = await noteService.getAllNotes();
-      if (response.ok) {
-        const data = await response.json();
-        setNotes(data);
-      }
+      try {
+        const response = await noteService.getAllNotes();
+        if (response.status === 200) {
+          const data = response.data;
+          setNotes(data);
+        }
+      } catch (error) {}
     };
     getNotes();
   }, []);
@@ -21,7 +24,7 @@ function NotesList() {
       {notes ? (
         <ul>
           {notes.map((note: Note) => {
-            return <li>{<NotesDetail key={note.id} note={note} />}</li>;
+            return <li key={note.id}>{<NotesDetail note={note} />}</li>;
           })}
         </ul>
       ) : (

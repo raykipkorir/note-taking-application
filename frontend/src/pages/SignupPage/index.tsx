@@ -2,11 +2,12 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import axios from "axios";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "../../services/auth.services";
 
 type Inputs = {
-  userType: string;
   name: string;
   email: string;
   password: string;
@@ -14,11 +15,58 @@ type Inputs = {
 };
 
 function index() {
-  const { register, handleSubmit, formState } = useForm<Inputs>();
-  const { errors } = formState;
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    const createUser = async () => {
+      try {
+        const response = await authService.signUp(
+          data.name,
+          data.email,
+          data.password,
+          data.re_password
+        );
+        if (response.status === 201) {
+          // login the user
+          const loginResponse = await authService.login(
+            data.email,
+            data.password
+          );
+          if (loginResponse.status === 200) {
+            localStorage.setItem("user", JSON.stringify(loginResponse.data));
+            window.location.reload();
+            navigate("/dashboard");
+          }
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (
+            error.response?.status === 400 &&
+            error.response.data.email?.[0] ===
+              "user with this email already exists."
+          ) {
+            setError("email", {
+              message: "User with this email address already exists",
+            });
+          }
+          if (
+            error.response?.status === 400 &&
+            error.response.data.non_field_errors?.[0] ===
+              "The two password fields didn't match."
+          ) {
+            setError("re_password", { message: "Password mismatch" });
+          }
+        }
+      }
+    };
+    createUser();
   };
 
   return (

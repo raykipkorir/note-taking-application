@@ -1,8 +1,11 @@
-import { useForm, SubmitHandler } from "react-hook-form";
-import TextField from "@mui/material/TextField/TextField";
-import Button from "@mui/material/Button/Button";
 import Box from "@mui/material/Box/Box";
+import Button from "@mui/material/Button/Button";
 import Stack from "@mui/material/Stack/Stack";
+import TextField from "@mui/material/TextField/TextField";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import noteService from "../../services/notes.services";
+
 type Inputs = {
   title: string;
   content: string;
@@ -12,8 +15,18 @@ function index() {
   const { register, handleSubmit, formState } = useForm<Inputs>();
   const { errors } = formState;
 
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    const createNote = async () => {
+      try {
+        const response = await noteService.createNote(data.title, data.content);
+        if (response.status === 201) {
+          navigate("/dashboard");
+        }
+      } catch (error) {}
+    };
+    createNote();
   };
 
   return (

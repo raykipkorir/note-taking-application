@@ -2,6 +2,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -10,6 +11,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,19 +25,39 @@ type Inputs = {
 
 function index() {
   const [showPassword, setShowPassword] = useState(false);
-  const { register, handleSubmit, formState } = useForm<Inputs>();
-  const { errors } = formState;
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>();
 
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const response = await authService.login(data.email, data.password);
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      localStorage.setItem("user", JSON.stringify(data));
-      window.location.reload();
-      navigate("/dashboard");
+    try {
+      setIsLoading(true);
+      const response = await authService.login(data.email, data.password);
+      setIsLoading(false);
+      if (response.status === 200) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        window.location.reload();
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      if (axios.isAxiosError(error)) {
+        if (
+          error.response?.status === 401 &&
+          error.response?.data.detail ===
+            "No active account found with the given credentials"
+        ) {
+          reset({ password: "" });
+          setError("password", { message: "Wrong email or password" });
+        }
+      }
     }
   };
 
@@ -118,6 +140,7 @@ function index() {
             </Stack>
             <Button variant="contained" type="submit">
               Login
+              {isLoading && <CircularProgress sx={{ color: "white" }} />}
             </Button>
           </Stack>
         </form>
