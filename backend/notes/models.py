@@ -9,5 +9,10 @@ class Note(models.Model):
     pinned = models.BooleanField(default=False)
     draft = models.BooleanField(default=False)
     trash = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["-updated_at"]

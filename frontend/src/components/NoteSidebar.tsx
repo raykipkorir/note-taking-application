@@ -24,18 +24,32 @@ function NoteSidebar() {
               Notes
             </Typography>
           </MenuItem>
-          <Link to={"/dashboard"}>
-            <MenuItem icon={<NotesIcon />}>All</MenuItem>
-          </Link>
-          <Link to={"/dashboard/pinned"}>
-            <MenuItem icon={<PushPinIcon />}>Pinned</MenuItem>
-          </Link>
-          <Link to={"/dashboard/draft"}>
-            <MenuItem icon={<SaveAsIcon />}>Draft</MenuItem>
-          </Link>
-          <Link to={"/dashboard/trash"}>
-            <MenuItem icon={<RestoreFromTrashIcon />}>Trash</MenuItem>
-          </Link>
+
+          <MenuItem icon={<NotesIcon />} component={<Link to="/dashboard" />}>
+            All
+          </MenuItem>
+
+          <MenuItem
+            icon={<PushPinIcon />}
+            component={<Link to={"/dashboard/pinned"} />}
+          >
+            Pinned
+          </MenuItem>
+
+          <MenuItem
+            icon={<SaveAsIcon />}
+            component={<Link to={"/dashboard/draft"} />}
+          >
+            Draft
+          </MenuItem>
+
+          <MenuItem
+            icon={<RestoreFromTrashIcon />}
+            component={<Link to={"/dashboard/trash"} />}
+          >
+            Trash
+          </MenuItem>
+
           <button type="submit" onClick={authService.logout}>
             <MenuItem icon={<LogoutIcon />}>Logout</MenuItem>
           </button>
