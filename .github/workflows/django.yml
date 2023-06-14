@@ -34,6 +34,7 @@ jobs:
       env:
         DEBUG: false
         SECRET_KEY: ci_cd_test_key
+        ALLOWED_HOSTS: http://127.0.0.1
       run: |
         cd backend
         coverage run manage.py test
