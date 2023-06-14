@@ -1,7 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from . import services
+from .models import Note
 from .serializers import NoteSerializer
 
 
@@ -12,6 +14,10 @@ class NoteApi(ModelViewSet):
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+
+    def get_object(self):
+        obj = get_object_or_404(Note, id=self.kwargs["pk"])
+        return obj
 
     def get_queryset(self):
         query_parameter = self.request.query_params.get("q")

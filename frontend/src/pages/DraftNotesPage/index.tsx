@@ -4,14 +4,16 @@ import NotesDetail from "../AllNotesPage/NotesDetail";
 import { Note } from "../AllNotesPage/NotesListType";
 
 function index() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<[]>();
 
   useEffect(() => {
     const retrieveDraftNotes = async () => {
       const response = await noteService.getDraftNotes();
       if (response.status === 200) {
         const data = response.data;
-        setNotes(data);
+        if (data.length >= 1) {
+          setNotes(data);
+        }
       }
     };
     retrieveDraftNotes();
@@ -20,11 +22,7 @@ function index() {
     <div>
       <p>Draft notes</p>
       {notes ? (
-        <ul>
-          {notes.map((note: Note) => {
-            return <li key={note.id}>{<NotesDetail note={note} />}</li>;
-          })}
-        </ul>
+        notes.map((note: Note) => <NotesDetail key={note.id} note={note} />)
       ) : (
         <p>No draft notes</p>
       )}

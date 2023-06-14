@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useNavigate,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import ErrorPage from "./components/ErrorPage";
 import Dashboard from "./layouts/Dashboard";
@@ -19,6 +15,7 @@ import TrashNotesPage from "./pages/TrashNotesPage";
 import authService from "./services/auth.services";
 import LoginRedirect from "./utils/LoginRedirect";
 import PrivateRoute from "./utils/PrivateRoute";
+import UpdateNotePage from "./pages/UpdateNotePage";
 
 // const navigate = useNavigate();
 const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -93,6 +90,10 @@ export const router = createBrowserRouter([
           {
             path: "new",
             element: <AddNotePage />,
+          },
+          {
+            path: ":id/update",
+            element: <UpdateNotePage />,
           },
           {
             path: "pinned",
