@@ -4,27 +4,25 @@ import NotesDetail from "../AllNotesPage/NotesDetail";
 import { Note } from "../AllNotesPage/NotesListType";
 
 function index() {
-  const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState<[]>();
 
   useEffect(() => {
     const retrieveTrashNotes = async () => {
       const response = await noteService.getTrashNotes();
       if (response.status === 200) {
         const data = response.data;
-        setNotes(data);
+        if (data.length >= 1) {
+          setNotes(data);
+        }
       }
     };
     retrieveTrashNotes();
   }, []);
   return (
     <div>
-      <p>Notes throw in trash</p>
+      <p>Notes thrown in the trash</p>
       {notes ? (
-        <ul>
-          {notes.map((note: Note) => {
-            return <li key={note.id}>{<NotesDetail note={note} />}</li>;
-          })}
-        </ul>
+        notes.map((note: Note) => <NotesDetail key={note.id} note={note} />)
       ) : (
         <p>No notes in the trash</p>
       )}

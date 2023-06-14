@@ -4,11 +4,11 @@ from .models import Note
 
 def get_all_notes(user):
     """Retrieve all notes for logged in user"""
-    return Note.objects.filter(user=user)
+    return Note.objects.filter(user=user, trash=False, draft=False)
 
 def get_pinned_notes(user):
     """Retrieve all pinned notes for logged in user"""
-    return Note.objects.filter(user=user, pinned=True)
+    return Note.objects.filter(user=user, pinned=True, trash=False, draft=False)
 
 def get_drafted_notes(user):
     """Retrieve all drafted notes for logged in user"""

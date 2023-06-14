@@ -17,12 +17,24 @@ function index() {
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = (
+    data,
+    event: React.BaseSyntheticEvent
+  ) => {
+    const clickedButtonName = event.nativeEvent.submitter.name;
+    console.log(clickedButtonName);
     const createNote = async () => {
       try {
-        const response = await noteService.createNote(data.title, data.content);
+        const response = await noteService.createNote(
+          data.title,
+          data.content,
+          clickedButtonName === "draftNote" && true
+        );
+
         if (response.status === 201) {
-          navigate("/dashboard");
+          clickedButtonName === "draftNote"
+            ? navigate("/dashboard/draft")
+            : navigate("/dashboard");
         }
       } catch (error) {}
     };
@@ -51,9 +63,19 @@ function index() {
             helperText={errors.content?.message}
             {...register("content", { required: "Content is required" })}
           />
-          <Button variant="contained" type="submit">
-            Add Note
-          </Button>
+          <Box sx={{ display: "flex", gap: "8px" }}>
+            <Button variant="contained" type="submit" name="addNote">
+              Add Note
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              name="draftNote"
+              type="submit"
+            >
+              Draft Note
+            </Button>
+          </Box>
         </Stack>
       </form>
     </Box>
