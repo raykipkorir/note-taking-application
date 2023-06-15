@@ -13,6 +13,7 @@ Containerizaion - Docker
 CI/CD workflow - Github Actions
 
 ## Overview
+Backend test coverage is 98%
 
 The backend is deployed on render while frontend is deployed on vercel.
 
