@@ -1,7 +1,9 @@
 import Box from "@mui/material/Box/Box";
 import Button from "@mui/material/Button/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack/Stack";
 import TextField from "@mui/material/TextField/TextField";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import noteService from "../../services/notes.services";
@@ -12,6 +14,7 @@ type Inputs = {
 };
 
 function index() {
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, formState } = useForm<Inputs>();
   const { errors } = formState;
 
@@ -22,12 +25,13 @@ function index() {
 
     const createNote = async () => {
       try {
+        setIsLoading(true);
         const response = await noteService.createNote(
           data.title,
           data.content,
           clickedButtonName === "draftNote" && true
         );
-
+        setIsLoading(false);
         if (response.status === 201) {
           clickedButtonName === "draftNote"
             ? navigate("/dashboard/draft")
@@ -62,7 +66,11 @@ function index() {
           />
           <Box sx={{ display: "flex", gap: "8px" }}>
             <Button variant="contained" type="submit" name="addNote">
-              Add Note
+              {isLoading ? (
+                <CircularProgress sx={{ color: "white" }} />
+              ) : (
+                "Add Note"
+              )}
             </Button>
             <Button
               variant="contained"
@@ -70,7 +78,11 @@ function index() {
               name="draftNote"
               type="submit"
             >
-              Draft Note
+              {isLoading ? (
+                <CircularProgress sx={{ color: "white" }} />
+              ) : (
+                "Draft Note"
+              )}
             </Button>
           </Box>
         </Stack>

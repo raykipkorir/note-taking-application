@@ -1,13 +1,14 @@
 import Box from "@mui/material/Box/Box";
 import Button from "@mui/material/Button/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack/Stack";
 import TextField from "@mui/material/TextField/TextField";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import noteService from "../../services/notes.services";
 import { Note } from "../AllNotesPage/NotesListType";
-import axios from "axios";
 
 type Inputs = {
   title: string;
@@ -15,6 +16,7 @@ type Inputs = {
 };
 
 function index() {
+  const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, formState } = useForm<Inputs>();
   const { errors } = formState;
   const { id } = useParams();
@@ -24,11 +26,13 @@ function index() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const updateNote = async () => {
       try {
+        setIsLoading(true);
         const response = await noteService.updateNote(
           id,
           data.title,
           data.content
         );
+        setIsLoading(false);
         if (response.status === 200) {
           navigate("/dashboard");
         }
@@ -82,8 +86,12 @@ function index() {
             helperText={errors.content?.message}
             {...register("content", { required: "Content is required" })}
           />
-          <Button variant="contained" type="submit">
-            Update Note
+          <Button variant="contained" type="submit" name="addNote">
+            {isLoading ? (
+              <CircularProgress sx={{ color: "white" }} />
+            ) : (
+              "Update Note"
+            )}
           </Button>
         </Stack>
       </form>
