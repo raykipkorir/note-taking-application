@@ -2,7 +2,7 @@ import Box from "@mui/material/Box/Box";
 import Button from "@mui/material/Button/Button";
 import Stack from "@mui/material/Stack/Stack";
 import TextField from "@mui/material/TextField/TextField";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import noteService from "../../services/notes.services";
 
@@ -17,12 +17,9 @@ function index() {
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<Inputs> = (
-    data,
-    event: React.BaseSyntheticEvent
-  ) => {
-    const clickedButtonName = event.nativeEvent.submitter.name;
-    console.log(clickedButtonName);
+  const onSubmit = (data: Inputs, event: any) => {
+    const clickedButtonName = event?.nativeEvent.submitter.name;
+
     const createNote = async () => {
       try {
         const response = await noteService.createNote(
