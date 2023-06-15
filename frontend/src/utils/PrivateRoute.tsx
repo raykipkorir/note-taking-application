@@ -9,7 +9,7 @@ function PrivateRoute({ children }: PrivateRouteProps) {
   if (user.access) {
     return children;
   }
-  return <Navigate to="/" />;
+  return <Navigate to="/" replace={true} />;
 }
 
 export default PrivateRoute;
