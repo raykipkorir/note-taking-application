@@ -1,8 +1,10 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import authService from "../../services/auth.services";
@@ -15,6 +17,7 @@ type Inputs = {
 };
 
 function index() {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -27,6 +30,7 @@ function index() {
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const createUser = async () => {
       try {
+        setIsLoading(true);
         const response = await authService.signUp(
           data.name,
           data.email,
@@ -40,12 +44,14 @@ function index() {
             data.password
           );
           if (loginResponse.status === 200) {
+            setIsLoading(false);
             localStorage.setItem("user", JSON.stringify(loginResponse.data));
             window.location.reload();
             navigate("/dashboard");
           }
         }
       } catch (error) {
+        setIsLoading(false);
         if (axios.isAxiosError(error)) {
           if (
             error.response?.status === 400 &&
@@ -127,11 +133,14 @@ function index() {
               required
               {...register("re_password", {
                 required: "Confirm password is required",
-                // validate: {},
               })}
             />
             <Button variant="contained" type="submit">
-              Sign up
+              {isLoading ? (
+                <CircularProgress sx={{ color: "white" }} />
+              ) : (
+                "Sign up"
+              )}
             </Button>
           </Stack>
         </form>

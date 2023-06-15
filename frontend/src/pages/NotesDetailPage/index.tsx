@@ -1,21 +1,25 @@
 import PushPinIcon from "@mui/icons-material/PushPin";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import noteService from "../../services/notes.services";
 import { Note } from "../AllNotesPage/NotesListType";
 
 function index() {
   const [note, setNote] = useState<Note>();
+  const [isLoading, setIsLoading] = useState(false);
+
   const { id } = useParams();
   const {
     state: { from },
   } = useLocation();
+
   const navigate = useNavigate();
 
   const handlePinClick = async () => {
@@ -63,11 +67,14 @@ function index() {
   useEffect(() => {
     const getNote = async () => {
       try {
+        setIsLoading(true);
         const response = await noteService.getNoteById(id);
+        setIsLoading(false);
         if (response.status === 200) {
           setNote(response.data);
         }
       } catch (error) {
+        setIsLoading(false);
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 404) {
             navigate("/dashboard");
@@ -77,53 +84,58 @@ function index() {
     };
     getNote();
   }, []);
-  return (
-    <div>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography component="h1" variant="h5">
-          {note?.title}
-        </Typography>
-        <Box sx={{ display: "flex", gap: "5px" }}>
-          <Button type="submit" onClick={handlePinClick}>
-            <Tooltip title={note?.pinned ? "Unpin" : "Pin"}>
-              <PushPinIcon />
-            </Tooltip>
-          </Button>
-          <Link to={`/dashboard/${note?.id}/update`}>
-            <Button
-              variant="contained"
-              type="submit"
-              size="small"
-              sx={{ marginRight: "5px" }}
-            >
-              Edit
-            </Button>
-          </Link>
-        </Box>
-      </Box>
 
-      <p>{note?.content}</p>
-      <Button
-        variant="contained"
-        color="error"
-        size="small"
-        sx={{ marginTop: "15px", marginRight: "8px" }}
-        onClick={note?.trash ? handleDeleteClick : handleTrashClick}
-      >
-        {note?.trash ? "Delete note" : "Throw in trash"}
-      </Button>
-      {note?.draft && (
+  if (isLoading) {
+    return <CircularProgress />;
+  } else {
+    return (
+      <div>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography component="h1" variant="h5">
+            {note?.title}
+          </Typography>
+          <Box sx={{ display: "flex", gap: "5px" }}>
+            <Button type="submit" onClick={handlePinClick}>
+              <Tooltip title={note?.pinned ? "Unpin" : "Pin"}>
+                <PushPinIcon />
+              </Tooltip>
+            </Button>
+            <Link to={`/dashboard/${note?.id}/update`}>
+              <Button
+                variant="contained"
+                type="submit"
+                size="small"
+                sx={{ marginRight: "5px" }}
+              >
+                Edit
+              </Button>
+            </Link>
+          </Box>
+        </Box>
+
+        <p>{note?.content}</p>
         <Button
           variant="contained"
+          color="error"
           size="small"
-          onClick={handlePublishDraft}
-          sx={{ marginTop: "15px" }}
+          sx={{ marginTop: "15px", marginRight: "8px" }}
+          onClick={note?.trash ? handleDeleteClick : handleTrashClick}
         >
-          Publish
+          {note?.trash ? "Delete note" : "Throw in trash"}
         </Button>
-      )}
-    </div>
-  );
+        {note?.draft && (
+          <Button
+            variant="contained"
+            size="small"
+            onClick={handlePublishDraft}
+            sx={{ marginTop: "15px" }}
+          >
+            Publish
+          </Button>
+        )}
+      </div>
+    );
+  }
 }
 
 export default index;

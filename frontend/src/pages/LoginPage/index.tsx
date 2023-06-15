@@ -139,8 +139,11 @@ function index() {
               </Typography>
             </Stack>
             <Button variant="contained" type="submit">
-              Login
-              {isLoading && <CircularProgress sx={{ color: "white" }} />}
+              {isLoading ? (
+                <CircularProgress sx={{ color: "white" }} />
+              ) : (
+                "Login"
+              )}
             </Button>
           </Stack>
         </form>
