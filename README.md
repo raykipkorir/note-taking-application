@@ -2,14 +2,18 @@
 This app allows users to write personal things
 
 ## Tech stack
-Backend - Django
+[Backend](https://github.com/raykipkorir/note-taking-application/tree/main/backend) - Django Rest Framework
 
-Frontend - React using Typescript
+[Frontend](https://github.com/raykipkorir/note-taking-application/tree/main/frontend) - React using Typescript
 
 Database - PostgreSQL
 
-Containerizaion - Docker & Docker-compose
+Containerizaion - Docker
 
 CI/CD workflow - Github Actions
 
-Web server - nginx
+## Overview
+
+The backend is deployed on render while frontend is deployed on vercel.
+
+[writepersonalnotes.vercel.app](https://writepersonalnotes.vercel.app)
