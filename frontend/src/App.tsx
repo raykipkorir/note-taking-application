@@ -20,7 +20,7 @@ import UpdateNotePage from "./pages/UpdateNotePage";
 // const navigate = useNavigate();
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-const interceptor = axios.interceptors.response.use(
+export const interceptor = axios.interceptors.response.use(
   (response) => {
     return response;
   },
