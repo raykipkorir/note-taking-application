@@ -1,12 +1,19 @@
 from django.contrib import admin
+from django.shortcuts import render
 from django.urls import include, path
 from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
                                    SpectacularSwaggerView)
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
+
+def index(request):
+    """Welcome page"""
+    return render(request, "index.html")
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", index, name="index"),
     path("api/", include([
         path("schema/", SpectacularAPIView.as_view(), name="schema"),
         path("schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger"),
