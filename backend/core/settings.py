@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     "djoser",
     "drf_spectacular",
     "corsheaders",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -181,4 +183,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://note-taking-app.onrender.com/",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "localhost"
 ]
