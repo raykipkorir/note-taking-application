@@ -14,6 +14,7 @@ def index(request):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),
+    path("__debug__/", include("debug_toolbar.urls")),
     path("api/", include([
         path("schema/", SpectacularAPIView.as_view(), name="schema"),
         path("schema/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger"),
