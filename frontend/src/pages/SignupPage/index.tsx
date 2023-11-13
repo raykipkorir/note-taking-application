@@ -7,7 +7,8 @@ import axios from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../../services/auth.services";
+import authService from "../../api/services/auth.services";
+import useAuth from "../../hooks/useAuth";
 
 type Inputs = {
   name: string;
@@ -26,6 +27,7 @@ function index() {
   } = useForm<Inputs>();
 
   const navigate = useNavigate();
+  const user = useAuth();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const createUser = async () => {
@@ -45,8 +47,9 @@ function index() {
           );
           if (loginResponse.status === 200) {
             setIsLoading(false);
-            localStorage.setItem("user", JSON.stringify(loginResponse.data));
-            window.location.reload();
+            user?.setAuthToken(loginResponse.data);
+            // localStorage.setItem("user", JSON.stringify(loginResponse.data));
+            // window.location.reload();
             navigate("/dashboard");
           }
         }
@@ -86,6 +89,7 @@ function index() {
           marginTop: "50px",
         }}
       >
+        <h1>Note taking app</h1>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Stack spacing={2} sx={{ width: "300px" }}>
             <TextField

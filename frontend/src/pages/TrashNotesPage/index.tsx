@@ -1,6 +1,6 @@
 import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useState } from "react";
-import noteService from "../../services/notes.services";
+import noteService from "../../api/services/notes.services";
 import NotesDetail from "../AllNotesPage/NotesDetail";
 import { Note } from "../AllNotesPage/NotesListType";
 

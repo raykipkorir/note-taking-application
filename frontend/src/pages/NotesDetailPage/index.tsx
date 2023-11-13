@@ -8,7 +8,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import noteService from "../../services/notes.services";
+import noteService from "../../api/services/notes.services";
 import { Note } from "../AllNotesPage/NotesListType";
 
 function index() {
