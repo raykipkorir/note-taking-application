@@ -2,9 +2,10 @@ import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 function Navbar() {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = useAuth();
 
   return (
     <Grid
@@ -35,7 +36,7 @@ function Navbar() {
           Note taking application
         </Typography>
       </Grid>
-      {user.access && (
+      {user?.token?.access && (
         <Grid item xs={12} md={4} sx={{ paddingTop: "0px" }}>
           <Button variant="contained" size="small">
             <Link to={"/dashboard/new"} style={{ fontSize: "13px" }}>

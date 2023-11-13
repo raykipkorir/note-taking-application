@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField/TextField";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import noteService from "../../services/notes.services";
+import noteService from "../../api/services/notes.services";
 
 type Inputs = {
   title: string;

@@ -7,7 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
-import noteService from "../../services/notes.services";
+import noteService from "../../api/services/notes.services";
 import { Note } from "../AllNotesPage/NotesListType";
 
 type Inputs = {

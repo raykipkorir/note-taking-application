@@ -15,8 +15,9 @@ import axios from "axios";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import authService from "../../api/services/auth.services";
 import Header from "../../components/Header";
-import authService from "../../services/auth.services";
+import useAuth from "../../hooks/useAuth";
 
 type Inputs = {
   email: string;
@@ -35,15 +36,16 @@ function index() {
   } = useForm<Inputs>();
 
   const navigate = useNavigate();
-
+  const user = useAuth();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       setIsLoading(true);
       const response = await authService.login(data.email, data.password);
       setIsLoading(false);
       if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        window.location.reload();
+        user?.setAuthToken(response.data);
+        // localStorage.setItem("user", JSON.stringify(response.data));
+        // window.location.reload();
         navigate("/dashboard");
       }
     } catch (error) {
