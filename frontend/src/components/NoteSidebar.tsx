@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { useState, useEffect } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
-import authService from "../services/auth.services";
+import authService from "../api/services/auth.services";
 
 function NoteSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -25,6 +25,7 @@ function NoteSidebar() {
     window.addEventListener("resize", updateMedia);
     return () => window.removeEventListener("resize", updateMedia);
   });
+
   return (
     <>
       <Sidebar
