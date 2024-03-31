@@ -124,6 +124,7 @@ function App() {
           const isAccessTokenExpired = Date.now() / 1000 > exp;
           if (isAccessTokenExpired) {
             const newAccessToken = async () => {
+              config.headers["Authorization"] = `Bearer ${user?.token?.access}`;
               const response = await authService.refreshToken(
                 user?.token?.refresh
               );
