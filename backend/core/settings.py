@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # third party apps
     "rest_framework",
     "djoser",
+    "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "corsheaders",
     "debug_toolbar",
@@ -175,8 +176,10 @@ DJOSER = {
 
 # simple jwt configurations
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=15)
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
